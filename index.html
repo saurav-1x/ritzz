@@ -24,12 +24,16 @@
         <span>Ritzz</span>
       </a>
       <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="pages/about.html">About</a></li>
         <li><a href="pages/shop.html">Shop</a></li>
-        <li><a href="#benefits">Why Ritzz</a></li>
-        <li><a href="#spotlight">Best Sellers</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <a class="nav-cta" href="pages/shop.html">Shop Now</a>
+      <a class="cart-link" href="pages/shop.html#cart-panel" aria-label="Open cart">
+        <span class="cart-icon" aria-hidden="true"></span>
+        <span class="cart-text">Cart</span>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
     </nav>
   </header>
 
@@ -44,7 +48,7 @@
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="pages/shop.html">Shop Now</a>
-          <a class="btn btn-secondary" href="#benefits">See Benefits</a>
+          <a class="btn btn-secondary" href="pages/about.html">About Us</a>
         </div>
         <div class="hero-metrics" aria-label="Store highlights">
           <div>
@@ -63,9 +67,9 @@
       </div>
     </section>
 
-    <section class="benefits" id="benefits">
+    <section class="benefits" id="about">
       <div class="section-heading">
-        <p class="eyebrow">Why it feels productive to shop here</p>
+        <p class="eyebrow">Why Ritzz</p>
         <h2>Less guesswork, stronger picks</h2>
       </div>
       <div class="benefit-grid">
@@ -149,9 +153,11 @@
     </div>
     <div class="footer-links">
       <a href="#home">Home</a>
+      <a href="pages/about.html">About</a>
       <a href="#collection">Collection</a>
       <a href="mailto:hello@ritzzclothing.com">hello@ritzzclothing.com</a>
     </div>
   </footer>
+  <script src="assets/js/cart.js"></script>
 </body>
 </html>
