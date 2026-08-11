@@ -1,391 +1,477 @@
+:root {
+  --bg: #f7f1e8;
+  --surface: #fffaf4;
+  --surface-strong: #1f1a17;
+  --text: #1e1712;
+  --text-soft: #5f544c;
+  --accent: #d96c2f;
+  --accent-dark: #b2501a;
+  --line: rgba(30, 23, 18, 0.12);
+  --shadow: 0 24px 60px rgba(24, 16, 11, 0.14);
+}
+
 * {
-    margin: 0;
-    padding: 0;
-  }
-  
-  header {
-    margin: 5px;
-    display: block;
-    margin: auto;
-    width: 100%;
-    background-color: #33333332;
-    align-content: center;
-  }
-  
-  header nav ul {
-    display: flex;
-    /* align-items: center; */
-    justify-content: center;
-    list-style: none;
-  }
-  
-  nav li {
-    margin: 15px 50px;
-  }
-  nav ul li:hover {
-    transform: scale(1.2);
-  }
-  nav ul li a {
-    color: #fff;
-    text-decoration: none;
-    padding: 5px;
-    font-weight: bold;
-    font-family: "Roboto", sans-serif;
-  }
-  nav ul li a:hover {
-    background-color: #d3c7c7;
-    border-radius: 4px;
-    color: black;
-    text-decoration: underline;
-    /* box-shadow: 0px 0px 10px 2px rgb(248, 240, 240); */
-  }
-  
-  #container-1 {
-    display: flex;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Manrope", sans-serif;
+  line-height: 1.6;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-header {
+  left: 0;
+  padding: 1.25rem 0;
+  position: sticky;
+  right: 0;
+  top: 0;
+  z-index: 10;
+}
+
+.navbar {
+  align-items: center;
+  backdrop-filter: blur(14px);
+  background: rgba(255, 250, 244, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 0.85rem 1.1rem;
+  width: calc(100% - 2rem);
+}
+
+.brand {
+  align-items: center;
+  display: flex;
+  font-family: "Gabarito", sans-serif;
+  font-size: 1.4rem;
+  gap: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.brand-mark {
+  height: 46px;
+  width: 46px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-soft);
+  font-size: 0.98rem;
+  font-weight: 700;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.footer-links a:hover {
+  color: var(--accent);
+}
+
+.nav-cta,
+.btn {
+  border-radius: 999px;
+  display: inline-flex;
+  font-weight: 800;
+  justify-content: center;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-cta {
+  background: var(--surface-strong);
+  color: #fff;
+  padding: 0.8rem 1.15rem;
+}
+
+.nav-cta:hover,
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.hero {
+  align-items: center;
+  background: url("bg1.jpg") center center / cover no-repeat;
+  display: flex;
+  min-height: 90vh;
+  overflow: hidden;
+  padding: 4rem 1.5rem 6rem;
+  position: relative;
+}
+
+.hero-overlay,
+.promo::before {
+  inset: 0;
+  position: absolute;
+  content: "";
+}
+
+.hero-overlay {
+  background:
+    linear-gradient(115deg, rgba(20, 15, 11, 0.82), rgba(20, 15, 11, 0.3)),
+    radial-gradient(circle at top right, rgba(217, 108, 47, 0.35), transparent 35%);
+}
+
+.hero-content,
+.promo-content,
+.benefits,
+.collection,
+.site-footer {
+  margin: 0 auto;
+  max-width: 1180px;
+  width: 100%;
+}
+
+.hero-content {
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 0.92rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.section-heading h2,
+.promo h2,
+.site-footer h2 {
+  font-family: "Gabarito", sans-serif;
+  line-height: 1;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 7vw, 6.3rem);
+  max-width: 760px;
+}
+
+.hero-copy {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 1.1rem;
+  margin-top: 1.25rem;
+  max-width: 580px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn {
+  border: 1px solid transparent;
+  padding: 0.95rem 1.45rem;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+
+.hero-metrics {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 2.75rem;
+  max-width: 760px;
+}
+
+.hero-metrics div {
+  background: rgba(255, 250, 244, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1.25rem;
+  padding: 1rem;
+}
+
+.hero-metrics strong {
+  display: block;
+  font-size: 1.45rem;
+}
+
+.hero-metrics span {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.95rem;
+}
+
+.benefits,
+.collection {
+  padding: 5rem 1.5rem;
+}
+
+.section-heading {
+  align-items: end;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.section-heading h2,
+.promo h2,
+.site-footer h2 {
+  font-size: clamp(2.1rem, 4vw, 3.5rem);
+}
+
+.benefit-grid,
+.product-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.benefit-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.benefit-card,
+.product-card {
+  border-radius: 1.75rem;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.benefit-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 1.75rem;
+}
+
+.benefit-card h3,
+.product-copy h3 {
+  font-family: "Gabarito", sans-serif;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+}
+
+.benefit-card p,
+.product-copy p,
+.site-footer p {
+  color: var(--text-soft);
+}
+
+.product-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card img {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  width: 100%;
+}
+
+.product-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.6rem;
+}
+
+.product-card-light {
+  background: #ffdfe8;
+}
+
+.product-card-dark {
+  background: #2d0f10;
+  color: #fff;
+}
+
+.product-card-dark .product-copy p,
+.product-card-dark .product-meta a {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.product-card-accent {
+  background: #f0d8ff;
+}
+
+.product-tag {
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.product-meta {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.price {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.product-meta a {
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.promo {
+  background: url("bg2.jpg") center center / cover no-repeat;
+  margin: 1rem 1.5rem 0;
+  overflow: hidden;
+  padding: 5rem 1.5rem;
+  position: relative;
+  border-radius: 2rem;
+}
+
+.promo::before {
+  background:
+    linear-gradient(115deg, rgba(22, 16, 11, 0.82), rgba(22, 16, 11, 0.38)),
+    radial-gradient(circle at bottom left, rgba(217, 108, 47, 0.3), transparent 34%);
+}
+
+.promo-content {
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.promo p:not(.eyebrow) {
+  color: rgba(255, 255, 255, 0.85);
+  margin: 1rem 0 1.8rem;
+  max-width: 560px;
+}
+
+.site-footer {
+  align-items: center;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  padding: 2.5rem 1.5rem 3rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  justify-content: flex-end;
+}
+
+@media (max-width: 980px) {
+  .navbar,
+  .site-footer,
+  .section-heading {
+    border-radius: 1.5rem;
     flex-direction: column;
-    height: 600px;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
+    align-items: flex-start;
   }
-  .logo {
-    height: 250px;
+
+  .nav-links,
+  .hero-metrics,
+  .benefit-grid,
+  .product-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .h-primary {
-    font-size: 5rem;
-    margin: 25px;
-    text-align: center;
-    font-weight: 900;
-    font-family: "Gabarito", cursive;
-    word-wrap: break-word;
-  }
-  
-  .btn {
-    cursor: pointer;
-    margin: 40px;
-    padding: 10px 35px;
-    border: 3px solid rgb(173, 173, 173);
-    font-size: 1.5rem;
-    color: rgb(30, 45, 76);
-    background-color: rgb(116, 140, 226);
-    border-radius: 25px;
-    text-decoration: underline;
-    font-family: "Roboto", sans-serif;
-  }
-  
-  #container-1::before {
-    content: "";
-    background: url(bg1.jpg) no-repeat center center/cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
+
+  .nav-links {
+    display: grid;
+    gap: 0.8rem;
     width: 100%;
-    z-index: -1;
-    opacity: 1;
   }
-  
-  #container-2 {
-    padding: 130px 0px;
-    height: 700px;
-  }
-  
-  .img {
-    height: 500px;
-  }
-  
-  #container-2 #cont2 {
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    display: flex;
+
+  .nav-cta {
     width: 100%;
-    height: 100%;
-    background-color: rgb(255 165 205);
   }
-  
-  .box2 {
-    margin: 0px 70px;
+
+  .footer-links {
+    justify-content: flex-start;
   }
-  #container-3 {
-    /* padding: 130px 0px; */
-    height: 700px;
+}
+
+@media (max-width: 640px) {
+  .site-header {
+    padding: 1rem 0 0;
   }
-  #container-3 #cont3 {
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(165, 25, 25);
+
+  .navbar,
+  .benefits,
+  .collection,
+  .site-footer {
+    width: calc(100% - 1.25rem);
   }
-  
-  .box3 {
-    margin: 0px 70px;
+
+  .hero,
+  .benefits,
+  .collection,
+  .promo,
+  .site-footer {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
-  
-  #container-4 {
-    padding: 90px 0px;
-    height: 700px;
+
+  .hero {
+    min-height: 82vh;
+    padding-top: 6.5rem;
   }
-  #container-4 #cont4 {
-    align-content: center;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    background-color: rgb(158 108 192);
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 14vw, 4rem);
   }
-  
-  #container-5 {
-    display: flex;
+
+  .hero-copy,
+  .promo p:not(.eyebrow) {
+    font-size: 1rem;
+  }
+
+  .hero-actions,
+  .product-meta {
     flex-direction: column;
-    height: 600px;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
+    align-items: flex-start;
   }
-  
-  #container-5::before {
-    content: "";
-    background: url(bg2.jpg) no-repeat center center/cover;
-    position: absolute;
-    height: 100%;
+
+  .btn,
+  .product-meta a {
     width: 100%;
-    z-index: -1;
-    opacity: 1;
   }
-  
-  .footer {
-    margin-bottom: 2px;
-    background-color: black;
-    color: white;
-    text-align: center;
-    font-size: 20px;
-    margin: 100px 0px;
-  }
-  
-  /* started text decoration */
-  
-  .h-secondary {
-    text-decoration: underline;
-    color: rgb(0, 0, 0);
-    text-decoration: bold;
-    font-weight: 900;
-    font-family: "Gabarito", cursive;
-  }
-  .font {
-    background-color: #fffdfd;
-    padding: 20px;
-  }
-  .font:hover {
-    box-shadow: 0px 0px 15px 5px;
-    transform: scale(1.1);
-  }
-  
-  .btn:hover {
-    /* box-shadow: 0px 0px 15px 5px; */
-    transform: scale(1.1);
-  }
-  
-  @media only screen and (max-width: 1280px) {
-    #container-1 {
-      height: 400px;
-      padding: 65px;
-    }
-  
-    .logo {
-      height: 200px;
-      margin-top: 60px;
-    }
-  
-    .h-primary {
-      font-size: 4.5rem;
-      margin: 25px;
-    }
-  
-    .btn {
-      padding: 8px 18px;
-      font-size: 1.2rem;
-    }
-  
-    #container-2 {
-      height: 500px;
-      margin-top: 250px;
-      padding: 0px 0px;
-    }
-    .img {
-      height: 300px;
-    }
-  
-    .box2 {
-      margin: 0px 35px;
-    }
-  
-    #container-3 {
-      height: 500px;
-      margin: 0px;
-    }
-    .box3 {
-      margin: 0px 70px;
-    }
-  
-    #container-4 {
-      height: 500px;
-      padding: 0px 0px;
-    }
-  
-    #footer {
-      font-size: 18px;
-    }
-  }
-  @media only screen and (max-width: 1024px) {
-    #container-1 {
-      height: 390px;
-      padding: 60px;
-    }
-  
-    .logo {
-      height: 180px;
-      margin-top: 50px;
-    }
-  
-    .h-primary {
-      margin: 30px;
-    }
-    .img {
-      height: 275px;
-    }
-  
-    .box2 {
-      margin: 0px 30px;
-    }
-  
-    .box3 {
-      margin: 0px 60px;
-    }
-    .h-secondary {
-      font-size: 1.4rem;
-    }
-  }
-  
-  @media only screen and (max-width: 768px) {
-    nav ul li a {
-      padding: 0px;
-    }
-    #container-1 {
-      height: 380px;
-    }
-  
-    .logo {
-      height: 170px;
-      margin-top: 50px;
-    }
-  
-    .h-primary {
-      margin: 35px;
-    }
-    #container-2 #cont2 {
-      display: block;
-    }
-  
-    #container-3 #cont3 {
-      display: block;
-    }
-    
-    #container-4 #cont4 {
-      display: block;
-    }
-    #container-2 {
-      height: 1000px;
-      padding: 0px 0px;
-      margin: 0px 0px;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-  
-    }
-    .box2 {
-      margin: 70px 160px;
-    }
-    .img {
-      height: 400px;
-      align-items: center;
-    }
-  
-    #container-3 {
-      height: 1000px;
-      margin: 0px;
-    }
-    .box3 {
-      margin: 20px 160px;
-    }
-  
-    #container-4 {
-      height: 1000px;
-      padding: 0px;
-    }
-    .box4{
-  
-      margin: 20px 160px;
-    }
-    .h-secondary {
-      font-size: 1.2rem;
-    }
-  }
-  
-  @media only screen and (max-width: 640px) {
-      nav{
-          display: none;
-      }
-    #container-1 {
-      height: 300px;
-    }
-  
-    .logo {
-      height: 120px;
-      margin-top: 50px;
-    }
-  
-    .h-primary {
-      margin: 30px;
-      font-size: 3rem;
-    }
-    .h-secondary {
-      font-size: 1rem;
-    }
-    .img{
-      height: 250px;
-  
-    }
-    #container-2 {
-      height: 750px;
-    }
-    .box2 {
-      margin: 100px 35px;
-    }
-    #container-3 {
-      height: 750px;
-    }
-    .box3{
-      margin: 100px 82px;
-    }
-    #container-4{
-      height: 750px;
-    }
-    .box4{
-      margin:100px 82px;
-    }
-    .h-secondary{
-      font-size: 0.8rem;
-    }
-  
-    .btn{
-  
-      /* padding: 1px 2px; */
-      font-size: 1rem;
-    }
-  }
+}
