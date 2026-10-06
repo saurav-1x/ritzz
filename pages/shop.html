@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shop | Ritzz Clothing</title>
-  <meta
-    name="description"
-    content="Browse Ritzz Clothing best sellers, shop featured tees, and add your favorite styles to cart."
-  >
+  <meta name="description"
+    content="Browse Ritzz Clothing best sellers, shop featured tees, and add your favorite styles to cart.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;600;800&family=Manrope:wght@400;500;700;800&display=swap"
-    rel="stylesheet"
-  >
+    rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
+
 <body>
   <header class="site-header">
     <nav class="navbar" aria-label="Primary">
@@ -29,11 +28,15 @@
         <li><a href="#shop-grid">Shop</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <a class="cart-link" href="#cart-panel" aria-label="Open cart">
+      <button class="cart-link" type="button" data-open-cart aria-label="Open cart">
         <span class="cart-icon" aria-hidden="true"></span>
         <span class="cart-text">Cart</span>
         <span class="cart-count" data-cart-count>0</span>
-      </a>
+      </button>
+      <button class="profile-link" type="button" data-open-profile aria-label="Open profile">
+        <span class="profile-icon" aria-hidden="true"></span>
+        <span class="profile-text">Profile</span>
+      </button>
     </nav>
   </header>
 
@@ -53,121 +56,34 @@
         <h2>Featured products ready to shop</h2>
       </div>
       <div class="toolbar-actions">
+        <label class="price-sort-control">Sort by
+          <select data-price-sort aria-label="Sort products by price">
+            <option value="featured">Featured</option>
+            <option value="price-ascending">Price: Low to high</option>
+            <option value="price-descending">Price: High to low</option>
+          </select>
+        </label>
         <a class="btn btn-primary" href="#shop-grid">Shop All</a>
         <a class="btn btn-ghost" href="../index.html">Back Home</a>
       </div>
     </section>
 
-    <section class="shop-grid" id="shop-grid">
-      <article class="shop-card">
-        <div class="shop-card-media">
-          <img src="../assets/images/imga.png" alt="Z7 MM Christ the Redeemer t-shirt">
-          <span class="shop-badge">New Drop</span>
-        </div>
-        <div class="shop-card-copy">
-          <p class="product-tag">Relaxed fit</p>
-          <h3>Z7 MM Christ the Redeemer</h3>
-          <p>Made from 100% biowash cotton with a breathable relaxed fit for everyday comfort.</p>
-          <ul class="shop-points">
-            <li>240 GSM fabric</li>
-            <li>Soft washed finish</li>
-            <li>Everyday streetwear fit</li>
-          </ul>
-          <div class="shop-card-meta">
-            <span class="price">Rs. 1499</span>
-            <span class="size-pill">Sizes: S to XL</span>
-          </div>
-          <div class="shop-actions">
-            <a class="btn btn-primary" href="mailto:hello@ritzzclothing.com?subject=Shop%20Now%20-%20Christ%20the%20Redeemer">Shop Now</a>
-            <button
-              class="btn btn-cart"
-              type="button"
-              data-add-to-cart
-              data-product-id="redeemer"
-              data-product-name="Z7 MM Christ the Redeemer"
-              data-product-price="1499"
-              data-product-size="S to XL"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      </article>
+    <section class="shop-grid" id="shop-grid" data-product-grid></section>
 
-      <article class="shop-card">
-        <div class="shop-card-media">
-          <img src="../assets/images/imgb.png" alt="Z7 MM Colosseum black t-shirt">
-          <span class="shop-badge">Best Seller</span>
-        </div>
-        <div class="shop-card-copy">
-          <p class="product-tag">Best seller</p>
-          <h3>Z7 MM Colosseum Black</h3>
-          <p>A cotton-elastane blend that stays soft while keeping its structure through repeat wear.</p>
-          <ul class="shop-points">
-            <li>Stretch blend comfort</li>
-            <li>Clean black graphic base</li>
-            <li>Easy pair-with-anything piece</li>
-          </ul>
-          <div class="shop-card-meta">
-            <span class="price">Rs. 1499</span>
-            <span class="size-pill">Sizes: S to XL</span>
-          </div>
-          <div class="shop-actions">
-            <a class="btn btn-primary" href="mailto:hello@ritzzclothing.com?subject=Shop%20Now%20-%20Colosseum%20Black">Shop Now</a>
-            <button
-              class="btn btn-cart"
-              type="button"
-              data-add-to-cart
-              data-product-id="colosseum-black"
-              data-product-name="Z7 MM Colosseum Black"
-              data-product-price="1499"
-              data-product-size="S to XL"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      </article>
-
-      <article class="shop-card">
-        <div class="shop-card-media">
-          <img src="../assets/images/imgc.png" alt="Plain Z7 t-shirt">
-          <span class="shop-badge">Daily Basic</span>
-        </div>
-        <div class="shop-card-copy">
-          <p class="product-tag">Daily essential</p>
-          <h3>Plain Z7 T-Shirt</h3>
-          <p>Premium biowash cotton in a clean silhouette that works as a dependable everyday basic.</p>
-          <ul class="shop-points">
-            <li>Minimal look</li>
-            <li>Easy layering tee</li>
-            <li>Light everyday feel</li>
-          </ul>
-          <div class="shop-card-meta">
-            <span class="price">Rs. 1199</span>
-            <span class="size-pill">Sizes: S to XL</span>
-          </div>
-          <div class="shop-actions">
-            <a class="btn btn-primary" href="mailto:hello@ritzzclothing.com?subject=Shop%20Now%20-%20Plain%20Z7">Shop Now</a>
-            <button
-              class="btn btn-cart"
-              type="button"
-              data-add-to-cart
-              data-product-id="plain-z7"
-              data-product-name="Plain Z7 T-Shirt"
-              data-product-price="1199"
-              data-product-size="S to XL"
-            >
-              Add to Cart
-            </button>
-          </div>
-        </div>
-      </article>
+    <section class="shop-note shop-note-compact">
+      <p class="eyebrow">Your bag</p>
+      <h2>Ready when you are</h2>
+      <p>Open your cart anytime to change quantities or continue to the COD checkout.</p>
+      <button class="btn btn-primary" type="button" data-open-cart>Open Cart <span data-cart-count>0</span></button>
     </section>
+  </main>
 
-    <section class="shop-note cart-panel" id="cart-panel">
+  <div class="modal" data-cart-modal aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-card cart-panel" id="cart-panel">
+      <button class="modal-close" type="button" data-close-modal aria-label="Close cart">×</button>
       <p class="eyebrow">Cart</p>
-      <h2>Products added to your cart</h2>
+      <h2 id="cart-title">Your shopping bag</h2>
       <div class="cart-list" data-cart-items>
         <p class="cart-empty">Your cart is empty. Add a product to see it here.</p>
       </div>
@@ -191,10 +107,85 @@
       </div>
       <div class="cart-footer-actions">
         <button class="btn btn-ghost" type="button" data-clear-cart>Clear Cart</button>
-        <a class="btn btn-primary" href="mailto:hello@ritzzclothing.com" data-checkout-link>Checkout on WhatsApp/Email</a>
+        <button class="btn btn-primary" type="button" data-open-checkout>Proceed to Checkout</button>
       </div>
     </section>
-  </main>
+  </div>
+
+  <div class="modal" data-checkout-modal aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="checkout-title">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-card checkout-card">
+      <button class="modal-close" type="button" data-close-modal aria-label="Close checkout">×</button>
+      <p class="eyebrow">Checkout</p>
+      <h2 id="checkout-title">Payment method</h2>
+      <div class="payment-option payment-option-active"><span>Cash on Delivery (COD)</span><strong>Available</strong>
+      </div>
+      <div class="payment-option payment-option-disabled"><span>UPI / Online Payment</span><strong>Not available
+          now</strong></div>
+      <div class="payment-option payment-option-disabled"><span>Card / Wallet</span><strong>Not available now</strong>
+      </div>
+      <p class="checkout-total">Order total: <strong data-checkout-total>Rs. 0</strong></p>
+      <a class="btn btn-primary" href="mailto:hello@ritzzclothing.com" data-cod-order>Place COD Order</a>
+    </section>
+  </div>
+
+  <p class="order-success-toast" data-order-success role="status" aria-live="polite" hidden></p>
+
+  <div class="modal" data-profile-modal aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="profile-title">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-card profile-card">
+      <button class="modal-close" type="button" data-close-modal aria-label="Close profile">×</button>
+      <div class="profile-layout">
+        <aside class="profile-avatar-panel">
+          <div class="profile-avatar">
+            <img data-profile-photo alt="Your profile photo" hidden>
+            <span data-profile-initials aria-hidden="true">R</span>
+          </div>
+          <label class="btn btn-ghost profile-upload" for="profile-photo-input">Add Photo</label>
+          <input class="profile-photo-input" id="profile-photo-input" type="file" accept="image/*"
+            data-profile-photo-input>
+          <p class="profile-photo-message" data-profile-photo-message aria-live="polite">Choose a photo up to 1 MB.</p>
+        </aside>
+        <div class="profile-details">
+          <p class="eyebrow">Your account</p>
+          <h2 id="profile-title">Profile details</h2>
+          <form class="profile-form" data-profile-form>
+            <label>Full name<input name="name" type="text" placeholder="Your name" required disabled></label>
+            <label>Phone number<input name="phone" type="tel" placeholder="Your mobile number" required
+                disabled></label>
+            <label>Email address<input name="email" type="email" placeholder="you@example.com" required
+                disabled></label>
+            <label class="profile-address">Delivery address<textarea name="address" rows="2"
+                placeholder="House no., street, city, PIN code" required disabled></textarea></label>
+            <div class="profile-form-actions">
+              <button class="btn btn-ghost" type="button" data-edit-profile>Edit Profile</button>
+              <button class="btn btn-primary" type="submit" data-save-profile hidden>Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <section class="profile-orders-section" aria-labelledby="profile-orders-title">
+        <div class="profile-orders-head">
+          <div>
+            <p class="eyebrow">Your account</p>
+            <h3 id="profile-orders-title">My Orders</h3>
+          </div>
+        </div>
+        <div data-orders-list></div>
+      </section>
+    </section>
+  </div>
+
+  <div class="modal" data-product-modal aria-hidden="true" role="dialog" aria-modal="true"
+    aria-labelledby="product-detail-title">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-card product-detail-card">
+      <button class="modal-close" type="button" data-close-modal aria-label="Close product details">&times;</button>
+      <div data-product-detail></div>
+    </section>
+  </div>
 
   <footer class="site-footer" id="contact">
     <div>
@@ -210,4 +201,5 @@
   </footer>
   <script src="../assets/js/cart.js"></script>
 </body>
+
 </html>

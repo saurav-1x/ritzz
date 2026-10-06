@@ -1,182 +1,76 @@
 const CART_KEY = "ritzz-cart";
-
-function readCart() {
-  try {
-    const stored = localStorage.getItem(CART_KEY);
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
+const PROFILE_KEY = "ritzz-profile";
+const ORDERS_KEY = "ritzz-orders";
+const productNames = ["Christ the Redeemer", "Colosseum Black", "Plain Z7", "Midnight Script", "Urban Bloom", "After Hours", "Concrete Wave", "Vintage Flame", "City Pulse", "Cloud Nine", "Mono Mark", "Sunset Club", "Ritzz Classic", "Off Grid", "Electric Avenue", "Sunday Ease", "Shadow Line", "Fresh Start", "Motion Theory", "Wild Frame", "Street Signal", "Moon Phase", "Core Logo", "Parallel Lines", "Golden Hour", "No Rules", "Day Shift", "Campus Crew", "Graphic Theory", "Late Checkout", "Easy Days", "Neon District", "Altitude", "Perfect Basic", "North Block", "Soft Focus", "The Daily", "Blackout", "Weekend Run", "Essential Club"];
+const images = ["imga.png", "imgb.png", "imgc.png", "imgd.png", "imge.png", "imgf.png", "imgg.png", "imgh.png", "imgi.png", "imgj.png", "imgk.png"];
+function readCart() { try { return JSON.parse(localStorage.getItem(CART_KEY) || "[]"); } catch { return []; } }
+function writeCart(cart) { localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+function formatPrice(value) { return `Rs. ${value}`; }
+function getCartQuantity(cart) { return cart.reduce((sum, item) => sum + item.quantity, 0); }
+function cartTotal(cart) { return cart.reduce((sum, item) => sum + item.price * item.quantity, 0); }
+function updateCartCount(cart) { document.querySelectorAll("[data-cart-count]").forEach((node) => { node.textContent = String(getCartQuantity(cart)); }); }
+function buildCheckoutLink(cart) { const lines = cart.map((item) => `${item.name} x${item.quantity} - ${formatPrice(item.price * item.quantity)}`); const body = ["Hello Ritzz,", "", "I want to place a Cash on Delivery order:", ...lines, "", `Total: ${formatPrice(cartTotal(cart))}`, "", "Payment method: Cash on Delivery (COD)"].join("\n"); return `mailto:hello@ritzzclothing.com?subject=Ritzz%20COD%20Order&body=${encodeURIComponent(body)}`; }
+function productData(index) { return { id: `ritzz-${index + 1}`, name: `Ritzz ${productNames[index]}`, price: index % 5 === 2 ? 1199 : index % 4 === 0 ? 1699 : 1499, image: images[index % images.length], rating: (4.4 + (index % 6) / 10).toFixed(1), fabric: index % 3 === 0 ? "240 GSM bio-wash cotton" : index % 3 === 1 ? "Premium cotton blend" : "180 GSM combed cotton", colours: index % 3 === 0 ? ["Black", "White", "Olive"] : index % 3 === 1 ? ["Black", "Charcoal", "Navy"] : ["White", "Sand", "Maroon"] }; }
+function renderProducts(sort = "featured") {
+    const grid = document.querySelector("[data-product-grid]");
+    if (!grid) return;
+    const indices = productNames.map((_, index) => index);
+    if (sort === "price-ascending") indices.sort((a, b) => productData(a).price - productData(b).price || a - b);
+    if (sort === "price-descending") indices.sort((a, b) => productData(b).price - productData(a).price || a - b);
+    grid.innerHTML = indices.map((index) => {
+        const product = productData(index);
+        return `<article class="shop-card" data-open-product="${index}" tabindex="0" role="button" aria-label="View details for ${product.name}"><div class="shop-card-media"><img src="../assets/images/${product.image}" alt="${product.name} t-shirt"><span class="shop-badge">${index === 0 ? "New Drop" : index === 1 ? "Best Seller" : "Ritzz Pick"}</span></div><div class="shop-card-copy"><div class="product-title-row"><h3>${product.name}</h3><span class="card-rating">★ ${product.rating}</span></div><span class="price">${formatPrice(product.price)}</span><label class="card-size-label">Size<select data-card-size><option>S</option><option selected>M</option><option>L</option><option>XL</option></select></label><button class="btn btn-cart" type="button" data-add-to-cart data-product-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.price}" data-product-size="M">Add to Cart</button></div></article>`;
+    }).join("");
 }
-
-function writeCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+function renderProductDetail(index) { const root = document.querySelector("[data-product-detail]"); if (!root) return; const product = productData(Number(index)); root.innerHTML = `<div class="product-detail-layout"><img src="../assets/images/${product.image}" alt="${product.name}"><div><p class="eyebrow">Ritzz collection</p><h2 id="product-detail-title">${product.name}</h2><div class="detail-rating">★ ${product.rating} <span>Customer rating</span></div><p class="detail-price">${formatPrice(product.price)}</p><p class="detail-description">A soft, structured everyday tee designed for relaxed streetwear styling. Made to feel comfortable from morning to night.</p><dl class="detail-specs"><div><dt>Cloth type</dt><dd>${product.fabric}</dd></div><div><dt>Fit</dt><dd>Relaxed regular fit</dd></div></dl><div class="colour-picker"><strong>Colour</strong><div>${product.colours.map((colour, colourIndex) => `<button type="button" class="colour-choice ${colourIndex === 0 ? "is-selected" : ""}" data-colour-choice>${colour}</button>`).join("")}</div></div><label class="detail-size">Select size<select data-detail-size><option>S</option><option selected>M</option><option>L</option><option>XL</option></select></label><button class="btn btn-cart" type="button" data-add-to-cart data-product-id="${product.id}" data-product-name="${product.name}" data-product-price="${product.price}" data-product-size="M">Add to Cart</button></div></div>`; }
+function openHashRoute() {
+    if (window.location.hash === "#profile") { fillProfile(); openModal("[data-profile-modal]"); return; }
+    if (window.location.hash === "#cart-panel") { openModal("[data-cart-modal]"); return; }
+    const productRoute = window.location.hash.match(/^#product-(\d+)$/);
+    if (!productRoute) return;
+    const index = Number(productRoute[1]);
+    if (index >= 0 && index < productNames.length) { renderProductDetail(index); openModal("[data-product-modal]"); }
 }
-
-function formatPrice(value) {
-  return `Rs. ${value}`;
+function renderCart(cart) { const itemsRoot = document.querySelector("[data-cart-items]"); updateCartCount(cart); const total = cartTotal(cart); document.querySelectorAll("[data-cart-items-count]").forEach((n) => n.textContent = String(getCartQuantity(cart))); document.querySelectorAll("[data-cart-subtotal], [data-cart-total], [data-checkout-total]").forEach((n) => n.textContent = formatPrice(total)); document.querySelectorAll("[data-cart-shipping]").forEach((n) => n.textContent = "Free"); document.querySelectorAll("[data-cod-order]").forEach((n) => { n.href = total ? buildCheckoutLink(cart) : "#"; n.setAttribute("aria-disabled", String(!total)); }); if (!itemsRoot) return; itemsRoot.innerHTML = cart.length ? cart.map((item) => `<div class="cart-item"><div class="cart-item-main"><strong>${item.name}</strong><span class="cart-item-meta">Size ${item.size}</span><span class="cart-item-price">${formatPrice(item.price * item.quantity)}</span></div><div class="cart-qty"><button type="button" data-cart-decrease="${item.id}">-</button><span>${item.quantity}</span><button type="button" data-cart-increase="${item.id}">+</button></div><button class="cart-remove" type="button" data-cart-remove="${item.id}">Remove</button></div>`).join("") : '<p class="cart-empty">Your cart is empty. Add a product to see it here.</p>'; }
+function addToCart(product) { const cart = readCart(); const item = cart.find((entry) => entry.id === product.id); item ? item.quantity++ : cart.push({ ...product, quantity: 1 }); writeCart(cart); renderCart(cart); openModal("[data-cart-modal]"); }
+function changeQuantity(id, delta) { const cart = readCart().map((item) => item.id === id ? { ...item, quantity: item.quantity + delta } : item).filter((item) => item.quantity > 0); writeCart(cart); renderCart(cart); }
+function closeModals() { document.querySelectorAll(".modal.is-open").forEach((modal) => { modal.classList.remove("is-open"); modal.setAttribute("aria-hidden", "true"); }); }
+function openModal(selector) { const modal = document.querySelector(selector); if (modal) { closeModals(); modal.classList.add("is-open"); modal.setAttribute("aria-hidden", "false"); } }
+function readSaved(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch { return fallback; } }
+function getProfile() { return readSaved(PROFILE_KEY, { name: "", phone: "", email: "", address: "" }); }
+function getOrders() { return readSaved(ORDERS_KEY, []); }
+function saveProfile(profile) { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); }
+function saveOrders(orders) { localStorage.setItem(ORDERS_KEY, JSON.stringify(orders)); }
+function setProfileEditing(isEditing) { const form = document.querySelector("[data-profile-form]"); if (!form) return; form.querySelectorAll("input, textarea").forEach((field) => { field.disabled = !isEditing; }); form.querySelector("[data-edit-profile]").hidden = isEditing; form.querySelector("[data-save-profile]").hidden = !isEditing; }
+function fillProfile() { const form = document.querySelector("[data-profile-form]"); if (!form) return; const profile = getProfile(); Object.entries(profile).forEach(([key, value]) => { if (form.elements[key]) form.elements[key].value = value; }); const photo = document.querySelector("[data-profile-photo]"); const initials = document.querySelector("[data-profile-initials]"); if (photo) { photo.src = profile.photo || ""; photo.hidden = !profile.photo; } if (initials) { initials.textContent = profile.name ? profile.name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join("").toUpperCase() : "R"; initials.hidden = Boolean(profile.photo); } setProfileEditing(false); renderOrders(); }
+function renderOrders() {
+    const root = document.querySelector("[data-orders-list]");
+    if (!root) return;
+    const orders = getOrders();
+    root.innerHTML = orders.length ? orders.map((order) => {
+        const cancelled = order.status === "Cancelled";
+        const steps = ["Order confirmed", "Packed", "Out for delivery", "Delivered"];
+        const active = cancelled ? -1 : 0;
+        const products = Array.isArray(order.products) ? `<ul class="order-products">${order.products.map((item) => {
+            const productName = String(item.name).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
+            const productLink = Number.isInteger(item.productIndex) && item.productIndex >= 0 && item.productIndex < productNames.length
+                ? `<a href="#product-${item.productIndex}">${productName}</a>`
+                : `<span>${productName}</span>`;
+            return `<li>${productLink}<span>Qty ${item.quantity}${item.size ? ` · Size ${item.size}` : ""}</span></li>`;
+        }).join("")}</ul>` : "";
+        return `<article class="order-card"><div class="order-head"><div><strong>${order.id}</strong><span>${order.date}</span></div><b class="order-status ${cancelled ? "is-cancelled" : ""}">${order.status}</b></div><p>${order.items} item(s) · ${formatPrice(order.total)} · COD</p>${products}${cancelled ? '<p class="order-cancelled">This order has been cancelled.</p>' : `<div class="tracking-line">${steps.map((step, index) => `<span class="${index <= active ? "is-active" : ""}"><i></i>${step}</span>`).join("")}</div><button class="btn btn-ghost cancel-order" type="button" data-cancel-order="${order.id}">Cancel Order</button>`}</article>`;
+    }).join("") : '<p class="cart-empty">No orders yet. Your COD orders will appear here with tracking updates.</p>';
 }
-
-function getCartQuantity(cart) {
-  return cart.reduce((sum, item) => sum + item.quantity, 0);
-}
-
-function updateCartCount(cart) {
-  const totalQuantity = getCartQuantity(cart);
-  document.querySelectorAll("[data-cart-count]").forEach((node) => {
-    node.textContent = String(totalQuantity);
-  });
-}
-
-function buildCheckoutLink(cart) {
-  const orderLines = cart.map((item) => `${item.name} x${item.quantity} - Rs. ${item.price * item.quantity}`);
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const body = [
-    "Hello Ritzz,",
-    "",
-    "I want to place this order:",
-    ...orderLines,
-    "",
-    `Total: Rs. ${subtotal}`,
-  ].join("\n");
-
-  return `mailto:hello@ritzzclothing.com?subject=Ritzz%20Order&body=${encodeURIComponent(body)}`;
-}
-
-function renderCart(cart) {
-  const itemsRoot = document.querySelector("[data-cart-items]");
-  const countNode = document.querySelector("[data-cart-items-count]");
-  const subtotalNode = document.querySelector("[data-cart-subtotal]");
-  const shippingNode = document.querySelector("[data-cart-shipping]");
-  const totalNode = document.querySelector("[data-cart-total]");
-  const checkoutLink = document.querySelector("[data-checkout-link]");
-
-  updateCartCount(cart);
-
-  if (!itemsRoot || !countNode || !subtotalNode || !shippingNode || !totalNode || !checkoutLink) {
-    return;
-  }
-
-  const totalQuantity = getCartQuantity(cart);
-  const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = subtotal > 0 ? 0 : 0;
-  const total = subtotal + shipping;
-
-  countNode.textContent = String(totalQuantity);
-  subtotalNode.textContent = formatPrice(subtotal);
-  shippingNode.textContent = subtotal > 0 ? "Free" : "Free";
-  totalNode.textContent = formatPrice(total);
-  checkoutLink.href = subtotal > 0 ? buildCheckoutLink(cart) : "mailto:hello@ritzzclothing.com";
-  checkoutLink.textContent = subtotal > 0 ? "Proceed to Checkout" : "Checkout on WhatsApp/Email";
-  checkoutLink.setAttribute("aria-disabled", subtotal > 0 ? "false" : "true");
-
-  if (cart.length === 0) {
-    itemsRoot.innerHTML = '<p class="cart-empty">Your cart is empty. Add a product to see it here.</p>';
-    return;
-  }
-
-  itemsRoot.innerHTML = cart
-    .map(
-      (item) => `
-        <div class="cart-item">
-          <div class="cart-item-main">
-            <strong>${item.name}</strong>
-            <span class="cart-item-meta">Sizes ${item.size}</span>
-            <span class="cart-item-price">${formatPrice(item.price * item.quantity)}</span>
-          </div>
-          <div class="cart-qty" aria-label="Quantity controls">
-            <button type="button" data-cart-decrease="${item.id}">-</button>
-            <span>${item.quantity}</span>
-            <button type="button" data-cart-increase="${item.id}">+</button>
-          </div>
-          <button class="cart-remove" type="button" data-cart-remove="${item.id}">Remove</button>
-        </div>
-      `
-    )
-    .join("");
-}
-
-function addToCart(product) {
-  const cart = readCart();
-  const existing = cart.find((item) => item.id === product.id);
-
-  if (existing) {
-    existing.quantity += 1;
-  } else {
-    cart.push({ ...product, quantity: 1 });
-  }
-
-  writeCart(cart);
-  renderCart(cart);
-  window.location.hash = "cart-panel";
-}
-
-function updateQuantity(productId, delta) {
-  const cart = readCart()
-    .map((item) => {
-      if (item.id === productId) {
-        return { ...item, quantity: item.quantity + delta };
-      }
-      return item;
-    })
-    .filter((item) => item.quantity > 0);
-
-  writeCart(cart);
-  renderCart(cart);
-}
-
-function removeItem(productId) {
-  const cart = readCart().filter((item) => item.id !== productId);
-  writeCart(cart);
-  renderCart(cart);
-}
-
-function clearCart() {
-  writeCart([]);
-  renderCart([]);
-}
-
-function setupAddToCart() {
-  document.querySelectorAll("[data-add-to-cart]").forEach((button) => {
-    button.addEventListener("click", () => {
-      addToCart({
-        id: button.getAttribute("data-product-id"),
-        name: button.getAttribute("data-product-name"),
-        price: Number(button.getAttribute("data-product-price")),
-        size: button.getAttribute("data-product-size"),
-      });
-    });
-  });
-}
-
-function setupCartPanelActions() {
-  document.addEventListener("click", (event) => {
-    const target = event.target;
-
-    if (!(target instanceof HTMLElement)) {
-      return;
-    }
-
-    if (target.hasAttribute("data-cart-increase")) {
-      updateQuantity(target.getAttribute("data-cart-increase"), 1);
-    }
-
-    if (target.hasAttribute("data-cart-decrease")) {
-      updateQuantity(target.getAttribute("data-cart-decrease"), -1);
-    }
-
-    if (target.hasAttribute("data-cart-remove")) {
-      removeItem(target.getAttribute("data-cart-remove"));
-    }
-
-    if (target.hasAttribute("data-clear-cart")) {
-      clearCart();
-    }
-  });
-}
-
-const currentCart = readCart();
-updateCartCount(currentCart);
-renderCart(currentCart);
-setupAddToCart();
-setupCartPanelActions();
+function createOrder() { const cart = readCart(); if (!cart.length) return; const orders = getOrders(); const order = { id: `RZ-${Date.now().toString().slice(-6)}`, date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }), items: getCartQuantity(cart), total: cartTotal(cart), products: cart.map((item) => { const match = item.id.match(/^ritzz-(\d+)(?:-|$)/); return { name: item.name, quantity: item.quantity, size: item.size, productIndex: match ? Number(match[1]) - 1 : null }; }), status: "Order Confirmed" }; saveOrders([order, ...orders]); writeCart([]); renderCart([]); renderOrders(); closeModals(); const notice = document.querySelector("[data-order-success]"); if (notice) { notice.textContent = `Order ${order.id} placed. You can track it in My Orders.`; notice.hidden = false; window.setTimeout(() => { notice.hidden = true; }, 4000); } }
+renderProducts(); renderCart(readCart());
+fillProfile(); renderOrders();
+openHashRoute();
+window.addEventListener("hashchange", openHashRoute);
+document.addEventListener("click", (event) => { const target = event.target; if (!(target instanceof HTMLElement)) return; if (target.closest("[data-open-cart]")) openModal("[data-cart-modal]"); if (target.closest("[data-close-modal]")) closeModals(); if (target.closest("[data-open-checkout]") && readCart().length) openModal("[data-checkout-modal]"); const add = target.closest("[data-add-to-cart]"); if (add) { const size = add.closest(".shop-card, .product-detail-card")?.querySelector("select")?.value || add.dataset.productSize; addToCart({ id: `${add.dataset.productId}-${size}`, name: add.dataset.productName, price: Number(add.dataset.productPrice), size }); } if (target.hasAttribute("data-cart-increase")) changeQuantity(target.dataset.cartIncrease, 1); if (target.hasAttribute("data-cart-decrease")) changeQuantity(target.dataset.cartDecrease, -1); if (target.hasAttribute("data-cart-remove")) { const cart = readCart().filter((item) => item.id !== target.dataset.cartRemove); writeCart(cart); renderCart(cart); } if (target.hasAttribute("data-clear-cart")) { writeCart([]); renderCart([]); } });
+document.addEventListener("click", (event) => { const target = event.target; if (!(target instanceof HTMLElement)) return; const card = target.closest("[data-open-product]"); if (card && !target.closest("button, select, option, label")) { renderProductDetail(card.dataset.openProduct); openModal("[data-product-modal]"); } const colour = target.closest("[data-colour-choice]"); if (colour) { colour.parentElement.querySelectorAll("[data-colour-choice]").forEach((button) => button.classList.remove("is-selected")); colour.classList.add("is-selected"); } });
+document.addEventListener("keydown", (event) => { const card = event.target.closest?.("[data-open-product]"); if (card && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); renderProductDetail(card.dataset.openProduct); openModal("[data-product-modal]"); } });
+document.addEventListener("change", (event) => { if (event.target.matches("[data-price-sort]")) renderProducts(event.target.value); });
+document.addEventListener("click", (event) => { const target = event.target; if (!(target instanceof HTMLElement)) return; if (target.closest("[data-open-profile]")) { fillProfile(); openModal("[data-profile-modal]"); } if (target.closest("[data-edit-profile]")) setProfileEditing(true); if (target.hasAttribute("data-cancel-order")) { const orders = getOrders().map((order) => order.id === target.dataset.cancelOrder ? { ...order, status: "Cancelled" } : order); saveOrders(orders); renderOrders(); } if (target.matches("[data-cod-order]")) createOrder(); });
+document.addEventListener("change", (event) => { const input = event.target; if (!(input instanceof HTMLInputElement) || !input.matches("[data-profile-photo-input]")) return; const file = input.files?.[0]; const message = document.querySelector("[data-profile-photo-message]"); if (!file) return; if (!file.type.startsWith("image/") || file.size > 1024 * 1024) { if (message) message.textContent = "Choose an image smaller than 1 MB."; input.value = ""; return; } const reader = new FileReader(); reader.addEventListener("load", () => { const profile = getProfile(); profile.photo = reader.result; try { saveProfile(profile); fillProfile(); if (message) message.textContent = "Photo updated."; } catch { if (message) message.textContent = "Photo could not be saved. Try a smaller image."; } }); reader.readAsDataURL(file); input.value = ""; });
+document.addEventListener("submit", (event) => { if (!event.target.matches("[data-profile-form]")) return; event.preventDefault(); const form = new FormData(event.target); saveProfile({ ...getProfile(), name: form.get("name").trim(), phone: form.get("phone").trim(), email: form.get("email").trim(), address: form.get("address").trim() }); setProfileEditing(false); fillProfile(); });
+document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeModals(); });
